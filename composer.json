@@ -1,0 +1,49 @@
+{
+    "name": "jordanbeattie/craftcms-hubspot-forms",
+    "description": "Hubspot forms field for CraftCMS",
+    "type": "craft-plugin",
+    "keywords": [
+        "craft",
+        "cms",
+        "craftcms",
+        "craft-plugin",
+        "HubSpot",
+        "forms"
+    ],
+    "support": {},
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Jordan Beattie",
+            "homepage": "https://jordanbeattie.com"
+        }
+    ],
+    "require": {
+        "craftcms/cms": "^4.0.0"
+    },
+    "autoload": {
+        "psr-4": {
+          "jordanbeattie\\hubspotforms\\": "src/"
+        }
+    },
+    "extra": {
+        "name": "HubSpot Forms",
+        "handle": "hubspot-forms",
+        "hasCpSettings": true,
+        "hasCpSection": false,
+        "changelogUrl": "",
+        "components": {},
+        "class": "jordanbeattie\\hubspotforms\\HubspotForms"
+    },
+    "minimum-stability": "dev",
+    "prefer-stable": true,
+    "require-dev": {
+        "craftcms/rector": "dev-main"
+    },
+    "config": {
+        "allow-plugins": {
+            "yiisoft/yii2-composer": true,
+            "craftcms/plugin-installer": true
+        }
+    }
+}
