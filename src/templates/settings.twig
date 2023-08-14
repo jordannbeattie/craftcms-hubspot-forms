@@ -1,11 +1,10 @@
 {% import '_includes/forms' as forms %}
 
-<p>Learn how to get your token at <a href="#">jordanbeattie.com/how-to-create-a-hubspot-token</a></p>
-
 {{ forms.autosuggestField({
-    label          : 'Hubspot Token',
+    label          : 'HubSpot Token',
     name           : 'hsToken',
     value          : settings['hsToken'],
+    instructions   : "Learn how to get your token at <a href='#'>jordanbeattie.com/how-to-create-a-hubspot-token</a>",
     required       : true,
     autofocus      : true,
     suggestEnvVars : true
@@ -15,5 +14,6 @@
     label          : 'Hubspot Portal ID',
     name           : 'hsPortalId',
     value          : settings['hsPortalId'],
-    disabled       : true
+    disabled       : true,
+    instructions   : "This will be retrieved automatically after inputting a valid HubSpot Token"
 }) }}
