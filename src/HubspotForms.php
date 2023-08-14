@@ -123,7 +123,7 @@ class HubspotForms extends Plugin
      * Settings template
      */
     protected function settingsHtml(): ?string{
-        return \Craft::$app->getView()->renderTemplate('hubspot-forms/settings', [
+        return \Craft::$app->getView()->renderTemplate('hubspot-forms/cms/settings', [
             'settings' => $this->getSettings()
         ]);
     }

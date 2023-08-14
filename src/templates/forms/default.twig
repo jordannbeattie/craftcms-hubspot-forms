@@ -1,16 +1,15 @@
 {% if (form is defined and form is not empty) and (portalId is defined and portalId is not empty) %}
 
-    {# HubSpot scripts #}
-    <script charset="utf-8" type="text/javascript" src="https://js.hsforms.net/forms/v2-legacy.js"></script>
-	<script charset="utf-8" type="text/javascript" src="https://js.hsforms.net/forms/v2.js"></script>
+    {# HubSpot script #}
+    {% js "//js-eu1.hsforms.net/forms/embed/v2.js" at head %}
 
     {# Form #}
-	<script>
+    <script>
         hbspt.forms.create({
             portalId: "{{ portalId }}",
             formId: "{{ form }}"
         });
-	</script>
+    </script>
 
 {% else %}
 
