@@ -1,10 +1,12 @@
 {% import '_includes/forms' as forms %}
 
+<p>Learn how to get your token at <a href="#">jordanbeattie.com/how-to-create-a-hubspot-token</a></p>
+
 {{ forms.autosuggestField({
-  label: 'Hubspot Token',
-  name: 'hsToken',
-  value: settings['hsToken'],
-  required: true,
-  autofocus: true,
-  suggestEnvVars: true
+    label          : 'Hubspot Token',
+    name           : 'hsToken',
+    value          : settings['hsToken'],
+    required       : true,
+    autofocus      : true,
+    suggestEnvVars : true
 }) }}

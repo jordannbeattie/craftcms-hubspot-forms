@@ -7,7 +7,7 @@ use GuzzleHttp\Client;
 class HubspotFormsVariable
 {
     
-    public function getForms()
+    public static function getForms()
     {
 
         /* Send request to HubSpot */
@@ -32,6 +32,9 @@ class HubspotFormsVariable
             /* Key = name, Value = ID */
             $forms[ $form->name ] = $form->id;
         }
+
+        /* Sort alphabetically */
+        ksort( $forms );
 
         /* Return forms array */
         return $forms;
