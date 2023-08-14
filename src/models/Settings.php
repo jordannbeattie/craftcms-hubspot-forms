@@ -5,8 +5,15 @@ use Craft;
 
 class Settings extends \craft\base\Model
 {
-    public $hsToken;
+
+    /*
+     * Declare Variables
+     */
+    public $hsToken, $hsPortalId;
     
+    /*
+     * Define rules
+     */
     public function rules(): array
     {
         return [
@@ -16,9 +23,20 @@ class Settings extends \craft\base\Model
         ];
     }
     
+    /*
+     * Get hsToken
+     */
     public function getHsToken(): ?string
     {
-        return Craft::parseEnv($this->hsToken);
+        return Craft::parseEnv( $this->hsToken );
+    }
+    
+    /*
+     * Get hsPortalId
+     */
+    public function getHsPortalId(): ?string
+    {
+        return Craft::parseEnv( $this->hsPortalId );
     }
     
 }

@@ -36,7 +36,8 @@ class HubspotFormDropdown extends Field
         ]];
 
         /* Create options */
-        foreach( HubspotFormsVariable::getForms() as $name => $id )
+        foreach( Craft::$app->getModule('hubspot-forms')->hubspotFormsService->getForms()
+        as $name => $id )
         {
             array_push( $options, [
                 'label' => $name, 

@@ -4,13 +4,16 @@ namespace jordanbeattie\hubspotforms;
 
 use Craft;
 use craft\base\Plugin;
-use craft\events\RegisterComponentTypesEvent;
+use craft\events\PluginEvent;
 
+use craft\events\RegisterComponentTypesEvent;
 use craft\events\RegisterTemplateRootsEvent;
 use craft\services\Fields;
+use craft\services\Plugins;
 use craft\web\twig\variables\CraftVariable;
 use craft\web\View;
 use jordanbeattie\hubspotforms\fields\HubspotFormDropdown;
+use jordanbeattie\hubspotforms\services\HubspotFormsService;
 use jordanbeattie\hubspotforms\variables\HubspotFormsVariable;
 use yii\base\Event;
 
@@ -23,6 +26,7 @@ class HubspotForms extends Plugin
     public static $plugin;
     public string $schemaVersion = '1.0.0';
     public bool $hasCpSettings = true;
+    private $isSavingSettings = false;
     
     public function init()
     {
@@ -68,6 +72,41 @@ class HubspotForms extends Plugin
             View::EVENT_REGISTER_SITE_TEMPLATE_ROOTS,
             function( RegisterTemplateRootsEvent $event ){
                 $event->roots['hubspot-forms'] = __DIR__ . '/templates';
+            }
+        );
+
+        /*
+         * Service
+         */
+        $this->setComponents([
+            'hubspotFormsService' => HubspotFormsService::class,
+        ]);
+
+        /*
+         * Settings Updated Event
+         * Set the PortalId
+         */
+        Event::on(
+            Plugins::class,
+            Plugins::EVENT_BEFORE_SAVE_PLUGIN_SETTINGS,
+            function(PluginEvent $event) {
+                
+                /* Prevent Recursion */
+                if ($this->isSavingSettings) {
+                    return;
+                }
+
+                /* Get new settings */
+                $newSettings = $event->plugin->getSettings();
+
+                /* Get Portal ID with new token */
+                $newSettings->hsPortalId = $this->hubspotFormsService->getPortalId( $newSettings->getHsToken() );
+
+                /* Save new settings */
+                $this->isSavingSettings = true;
+                Craft::$app->getPlugins()->savePluginSettings($this, $newSettings->toArray());
+                $this->isSavingSettings = false;
+
             }
         );
         

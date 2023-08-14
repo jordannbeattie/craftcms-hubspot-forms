@@ -2,73 +2,27 @@
 
 namespace jordanbeattie\hubspotforms\variables;
 
+use Craft;
 use GuzzleHttp\Client;
+use jordanbeattie\hubspotforms\HubspotForms;
+use Twig\Markup;
 
 class HubspotFormsVariable
 {
-    
-    public static function getForms()
-    {
-
-        /* Send request to HubSpot */
-        $request = static::sendRequest( "https://api.hubapi.com/marketing/v3/forms/" );
-        
-        /* Exit on failure */
-        if( is_null( $request ) || !$request->getStatusCode() == "200" )
-        {
-            return [];
-        }
-
-        /* Create forms array */
-        $forms = [];
-
-        /* Get forms from API request */
-        $apiForms = json_decode( $request->getBody()->getContents() )->results;
-
-        /* Loop forms from API request */
-        foreach( $apiForms as $form )
-        {
-            /* Add form to forms array */
-            /* Key = name, Value = ID */
-            $forms[ $form->name ] = $form->id;
-        }
-
-        /* Sort alphabetically */
-        ksort( $forms );
-
-        /* Return forms array */
-        return $forms;
-        
-    }
 
     /*
-     * Send API Request
+     * Render Form
      */
-    private static function sendRequest( $url )
+    public function render( $formId )
     {
-        try
-        {
+        // Get the template content as a string
+        $content = Craft::$app->getView()->renderTemplate('hubspot-forms/render-form', [
+            'form'     => $formId,
+            'portalId' => HubspotForms::getInstance()->settings->getHsPortalId()
+        ]);
 
-            /* Get HubSpot token */
-            $token = \jordanbeattie\hubspotforms\HubspotForms::getInstance()->settings->getHsToken();
-            
-            /* Create HTTP Client */
-            $request = new Client();
-    
-            /* Send request with token */
-            return $request->get( $url, [ 'headers' => [
-                "Authorization" => "Bearer {$token}",
-                "Accept" => "application/json",
-            ]]);
-            
-        }
-        catch( \Throwable $th )
-        {
-
-            /* Return null upon error */
-            return null;
-
-        }
+        // Render the template content as raw string
+        return new Markup($content, Craft::$app->charset);
     }
 
 }
