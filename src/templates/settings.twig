@@ -1,0 +1,10 @@
+{% import '_includes/forms' as forms %}
+
+{{ forms.autosuggestField({
+  label: 'Hubspot Token',
+  name: 'hsToken',
+  value: settings['hsToken'],
+  required: true,
+  autofocus: true,
+  suggestEnvVars: true
+}) }}

@@ -47,7 +47,7 @@ class HubspotFormsVariable
         {
 
             /* Get HubSpot token */
-            $token = "";
+            $token = \jordanbeattie\hubspotforms\HubspotForms::getInstance()->settings->getHsToken();
             
             /* Create HTTP Client */
             $request = new Client();
