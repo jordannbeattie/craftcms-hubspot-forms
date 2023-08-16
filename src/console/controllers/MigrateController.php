@@ -17,6 +17,14 @@ class MigrateController extends Controller
     public function actionRun(): int
     {
 
+        /* Get the user to confirm */
+        $this->line( "You should ensure you have a backup of your database and run this in a local environment.", "warning" );
+        if( !$this->confirm("Are you sure you want to continue?") )
+        {
+            $this->line( "Migration cancelled!", "error" );
+            return $this->end();
+        }
+
         /* Check old plugin is installed */
         if( !Craft::$app->plugins->isPluginInstalled('hubspot') )
         {
