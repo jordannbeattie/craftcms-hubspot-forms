@@ -1,0 +1,26 @@
+{% if (form is defined and form is not empty) and (portalId is defined and portalId is not empty) and (event is defined and event is not empty) %}
+
+    {# HubSpot script #}
+    {% js "//js-eu1.hsforms.net/forms/embed/v2.js" at head %}   
+
+    <script>
+        /* Add event listener */
+        window.addEventListener( "{{ event }}", function(){
+                
+            /* Render form */
+            hbspt.forms.create({
+                portalId: "{{ portalId }}",
+                formId: "{{ form }}"
+            });
+
+        });
+    </script>
+
+{% else %}
+
+    {# Report error #}
+    <script>
+        console.log("[HubSpot Forms] Could not render form.")
+    </script>
+    
+{% endif %}

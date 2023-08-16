@@ -16,14 +16,16 @@ class HubspotFormsVariable
     public function render( $formId, $options = [] )
     {
 
-        $templatePath = ( $options['loadOnScroll'] ?? false )
-            ? 'hubspot-forms/forms/load-on-scroll'
+        // Set the template path
+        $templatePath = ( $options['loadOnEvent'] ?? false )
+            ? 'hubspot-forms/forms/load-on-event'
             : 'hubspot-forms/forms/default';
 
         // Get the template content as a string
         $content = Craft::$app->getView()->renderTemplate( $templatePath, [
             'form'     => $formId,
             'portalId' => HubspotForms::getInstance()->settings->getHsPortalId(),
+            'event'    => $options['loadOnEvent'] ?? null
         ]);
 
         // Render the template content as raw string
