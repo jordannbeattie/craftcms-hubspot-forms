@@ -91,23 +91,26 @@ class HubspotForms extends Plugin
             Plugins::class,
             Plugins::EVENT_BEFORE_SAVE_PLUGIN_SETTINGS,
             function(PluginEvent $event) {
-                
-                /* Prevent Recursion */
-                if ($this->isSavingSettings) {
-                    return;
+                if( static::getInstance()->getHandle() == $event->plugin->handle )
+                {
+
+                    /* Prevent Recursion */
+                    if ($this->isSavingSettings) {
+                        return;
+                    }
+    
+                    /* Get new settings */
+                    $newSettings = $event->plugin->getSettings();
+    
+                    /* Get Portal ID with new token */
+                    $newSettings->hsPortalId = $this->hubspotFormsService->getPortalId( $newSettings->getHsToken() );
+    
+                    /* Save new settings */
+                    $this->isSavingSettings = true;
+                    Craft::$app->getPlugins()->savePluginSettings($this, $newSettings->toArray());
+                    $this->isSavingSettings = false;
+
                 }
-
-                /* Get new settings */
-                $newSettings = $event->plugin->getSettings();
-
-                /* Get Portal ID with new token */
-                $newSettings->hsPortalId = $this->hubspotFormsService->getPortalId( $newSettings->getHsToken() );
-
-                /* Save new settings */
-                $this->isSavingSettings = true;
-                Craft::$app->getPlugins()->savePluginSettings($this, $newSettings->toArray());
-                $this->isSavingSettings = false;
-
             }
         );
 
