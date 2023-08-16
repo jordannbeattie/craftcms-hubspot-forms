@@ -17,8 +17,10 @@ class MigrateController extends Controller
     public function actionRun(): int
     {
 
-        /* Get the user to confirm */
+        /* Output warning */
         $this->line( "You should ensure you have a backup of your database and run this in a local environment.", "warning" );
+
+        /* Get the user to confirm */
         if( !$this->confirm("Are you sure you want to continue?") )
         {
             $this->line( "Migration cancelled!", "error" );
@@ -170,7 +172,8 @@ class MigrateController extends Controller
      */
     private function updateFieldType( $field )
     {
-        // Create a new field of type HubspotFormDropdown
+
+        /* Create a new field with same settings */
         $newField = new HubspotFormDropdown();
         $newField->id = $field->id;
         $newField->groupId = $field->groupId;
@@ -180,7 +183,7 @@ class MigrateController extends Controller
         $newField->translationMethod = $field->translationMethod;
         $newField->translationKeyFormat = $field->translationKeyFormat;
 
-        // Save the new field
+        /* Save field */
         return Craft::$app->fields->saveField($newField) ? true : false;
 
     }
