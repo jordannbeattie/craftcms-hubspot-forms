@@ -5,9 +5,10 @@ namespace jordanbeattie\hubspotforms;
 use Craft;
 use craft\base\Plugin;
 use craft\events\PluginEvent;
-
 use craft\events\RegisterComponentTypesEvent;
+use craft\events\RegisterCpNavItemsEvent;
 use craft\events\RegisterTemplateRootsEvent;
+use craft\web\twig\variables\Cp;
 use craft\services\Fields;
 use craft\services\Plugins;
 use craft\web\twig\variables\CraftVariable;
@@ -107,6 +108,34 @@ class HubspotForms extends Plugin
                 Craft::$app->getPlugins()->savePluginSettings($this, $newSettings->toArray());
                 $this->isSavingSettings = false;
 
+            }
+        );
+
+        /*
+         * Sidebar Item
+         */
+        Event::on(
+            Cp::class,
+            Cp::EVENT_REGISTER_CP_NAV_ITEMS,
+            function( RegisterCpNavItemsEvent $event )
+            {
+                if( $this->hubspotFormsService->hasValidSettings() )
+                {
+
+                    /* Create nav item */
+                    $newItem = [
+                        'url' => $this->hubspotFormsService->getFormsUrl(),
+                        'label' => 'HubSpot Forms',
+                        'icon' => __DIR__ . '/nav-icon.svg',
+                    ];
+        
+                    /* Set position (above Utilities) */
+                    $position = count($event->navItems) - 2;
+
+                    /* Add nav item */
+                    array_splice($event->navItems, $position, 0, [$newItem]);
+
+                }
             }
         );
         

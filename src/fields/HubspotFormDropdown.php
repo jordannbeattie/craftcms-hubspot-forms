@@ -59,7 +59,18 @@ class HubspotFormDropdown extends Field
      */
     public function getSettingsHtml(): ?string
     {
-        return null; // No settings for this field
+
+        /* If settings incorrect */
+        if( !Craft::$app->plugins->getPlugin('hubspot-forms')->hubspotFormsService->hasValidSettings() )
+        {
+            return Craft::$app->getView()->renderTemplate(
+                'hubspot-forms/cms/token-warning'
+            );
+        }
+
+        /* Default - no settings */
+        return null;
+
     }
 
 }

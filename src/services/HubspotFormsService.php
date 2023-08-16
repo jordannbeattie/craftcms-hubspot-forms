@@ -3,6 +3,7 @@
 namespace jordanbeattie\hubspotforms\services;
 
 use craft\base\Component;
+use Craft;
 use GuzzleHttp\Client;
 use jordanbeattie\hubspotforms\HubspotForms;
 
@@ -61,6 +62,28 @@ class HubspotFormsService extends Component
         /* Get portal id from response */
         return json_decode( $request->getBody()->getContents() )->portalId ?? null;
 
+    }
+
+    /*
+     * Check settings
+     */
+    public function hasValidSettings(): bool
+    {
+
+        /* Get settings */
+        $settings = Craft::$app->plugins->getPlugin('hubspot-forms')->getSettings();
+
+        /* Return token & portalId set */
+        return ( $settings->getHsToken() && $settings->getHsPortalId() );
+
+    }
+
+    /*
+     * Forms URL
+     */
+    public function getFormsUrl()
+    {
+        return "https://app.hubspot.com/forms/{$this->getPortalId()}";
     }
 
     /*
