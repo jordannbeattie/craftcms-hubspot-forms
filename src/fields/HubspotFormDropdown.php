@@ -15,7 +15,7 @@ class HubspotFormDropdown extends Field
      */
     public static function displayName(): string
     {
-        return Craft::t('hubspot-forms', 'Hubspot Form');
+        return Craft::t('hubspot-forms', 'HubSpot Form');
     }
 
     /*
