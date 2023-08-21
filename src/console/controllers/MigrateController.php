@@ -149,7 +149,7 @@ class MigrateController extends Controller
                 {
                     foreach( $blockType->getFieldLayout()->customFields as $field )
                     {
-                        array_push( $matrixBlockFields, $field );
+                        array_push( $matrixBlockFields, Craft::$app->fields->getFieldById( $field->id ) );
                     }
                 }
                 $array = $this->getOldFormFields( $matrixBlockFields, $array );
@@ -181,15 +181,35 @@ class MigrateController extends Controller
         /* Create a new field with same settings */
         $newField = new HubspotFormDropdown();
         $newField->id = $field->id;
-        $newField->groupId = $field->groupId;
         $newField->name = $field->name;
         $newField->handle = $field->handle;
         $newField->instructions = $field->instructions;
         $newField->translationMethod = $field->translationMethod;
         $newField->translationKeyFormat = $field->translationKeyFormat;
 
+        /* Set Context or Group */
+        if ($field->context && strpos($field->context, 'matrixBlockType:') === 0) {
+
+            /* If matrix field, set context*/
+            $newField->context = $field->context;
+
+        } 
+        else {
+
+            /* If root field, set group */
+            $newField->groupId = $field->groupId;
+            
+        }
+
         /* Save field */
-        return Craft::$app->fields->saveField($newField) ? true : false;
+        if( Craft::$app->fields->saveField($newField) )
+        {
+            return true;
+        }
+        else 
+        {
+            $this->line( "Error updating {$newField->handle}: " . print_r( $newField->getErrors(), true ), "error" );
+        }
 
     }
     
