@@ -1,6 +1,10 @@
 # Hubspot Forms
 Select your HubSpot forms directly from a CMS field and render them with Twig. No more copy & pasting embed codes! 
 
+> **Disclaimer:** This plugin, "HubSpot Forms", is independently developed and is not officially endorsed by or affiliated with HubSpot, Inc. While it interacts with the HubSpot API, it is a third-party tool and any support or issues should be directed to the developers of this plugin, not HubSpot. The use of HubSpot's logo is for identification purposes only, signifying compatibility with HubSpot services.
+
+
+
 ## Installation
 ### From the browser
 1. Download the plugin from the Craft Plugin Store
