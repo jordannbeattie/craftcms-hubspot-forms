@@ -20,13 +20,6 @@ class MigrateController extends Controller
         /* Output warning */
         $this->line( "You should ensure you have a backup of your database and run this in a local environment.", "warning" );
 
-        /* Get the user to confirm */
-        if( !$this->confirm("Are you sure you want to continue?") )
-        {
-            $this->line( "Migration cancelled!", "error" );
-            return $this->end();
-        }
-
         /* Check old plugin is installed */
         if( !Craft::$app->plugins->isPluginInstalled('hubspot') )
         {
@@ -57,6 +50,17 @@ class MigrateController extends Controller
 
         /* Output how many fields were found */
         $this->line( "Found " . count( $oldFields ) . " old field(s)" );
+        $this->listFieldHandles( $oldFields );
+
+        /* Get the user to confirm */
+        if( !$this->confirm( "Are you sure you want to migrate the above fields?" ) )
+        {
+            $this->line( "Migration cancelled!", "error" );
+            return $this->end();
+        }
+
+        /* Set migrated count */
+        $fieldsMigrated = 0;
 
         /* Update each field type */
         foreach( $oldFields as $field )
@@ -70,11 +74,15 @@ class MigrateController extends Controller
             {
                 $this->line( "Error migrating " . $field->handle );
             }
+            else 
+            {
+                $fieldsMigrated++;
+            }
 
         }
 
         /* Output success message */
-        $this->line( count($oldFields) . " field(s) migrated!", "success" );
+        $this->line( "{$fieldsMigrated} field(s) migrated!", "success" );
         return $this->end();
 
     }
@@ -127,13 +135,6 @@ class MigrateController extends Controller
         foreach( $fields as $field )
         {
 
-            // $this->line( $field->handle . " is instanceof " . get_class( $field ) );
-
-            if( is_string( $field ) )
-            {
-                $this->line( $field );
-            }
-
             /* If field is old hubspot form, add to the array */
             if( $field instanceof \jordanbeattie\hubspot\fields\HubspotForm )
             {
@@ -141,14 +142,18 @@ class MigrateController extends Controller
             }
 
             /* If field is matrix, loop block types and check fields */
-            // elseif( $field instanceof \craft\fields\Matrix )
-            // {
-            //     foreach( $field->getBlockTypes() as $blockType )
-            //     {
-            //         $array = $this->getOldFormFields( Craft::$app->fields->id($blockType->fieldLayout->fieldIds), $array );
-            //         $this->line( $blockType->handle . " is a matrix block and the " . $blockType->handle . " has a layout id of " . $blockType->fieldLayoutId );
-            //     }
-            // }
+            elseif( $field instanceof \craft\fields\Matrix )
+            {
+                $matrixBlockFields = [];
+                foreach( $field->getBlockTypes() as $blockType )
+                {
+                    foreach( $blockType->getFieldLayout()->customFields as $field )
+                    {
+                        array_push( $matrixBlockFields, $field );
+                    }
+                }
+                $array = $this->getOldFormFields( $matrixBlockFields, $array );
+            }
 
             /* If SuperTable installed */
             elseif( Craft::$app->plugins->isPluginInstalled('super-table') )
@@ -186,6 +191,17 @@ class MigrateController extends Controller
         /* Save field */
         return Craft::$app->fields->saveField($newField) ? true : false;
 
+    }
+    
+    /*
+     * List Field Handles
+     */
+    private function listFieldHandles( $fields = [] )
+    {
+        foreach( $fields as $field )
+        {
+            $this->line("  - {$field->handle}");
+        }
     }
     
 }
