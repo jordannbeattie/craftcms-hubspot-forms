@@ -25,8 +25,6 @@ class HubspotForms extends Plugin
      * Variables
      */
     public static $plugin;
-    public string $schemaVersion = '1.0.0';
-    public bool $hasCpSettings = true;
     private $isSavingSettings = false;
     
     public function init()
