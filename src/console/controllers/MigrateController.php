@@ -144,15 +144,7 @@ class MigrateController extends Controller
             /* If field is matrix, loop block types and check fields */
             elseif( $field instanceof \craft\fields\Matrix )
             {
-                $matrixBlockFields = [];
-                foreach( $field->getBlockTypes() as $blockType )
-                {
-                    foreach( $blockType->getFieldLayout()->customFields as $field )
-                    {
-                        array_push( $matrixBlockFields, Craft::$app->fields->getFieldById( $field->id ) );
-                    }
-                }
-                $array = $this->getOldFormFields( $matrixBlockFields, $array );
+                $array = $this->getOldFormFields( $field->getBlockTypeFields(), $array );
             }
 
             /* If SuperTable installed */
