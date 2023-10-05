@@ -16,27 +16,44 @@ class HubspotFormsService extends Component
     public function getForms()
     {
 
-        /* Send request to HubSpot */
-        $request = $this->sendRequest( "https://api.hubapi.com/marketing/v3/forms/" );
-        
-        /* Exit on failure */
-        if( is_null( $request ) || !$request->getStatusCode() == "200" )
-        {
-            return [];
-        }
-
         /* Create forms array */
         $forms = [];
 
-        /* Get forms from API request */
-        $apiForms = json_decode( $request->getBody()->getContents() )->results;
+        /* Set API URL */
+        $link = "https://api.hubapi.com/marketing/v3/forms?limit=100";
 
-        /* Loop forms from API request */
-        foreach( $apiForms as $form )
+        while( true )
         {
-            /* Add form to forms array */
-            /* Key = name, Value = ID */
-            $forms[ $form->name ] = $form->id;
+
+            /* Send request to HubSpot */
+            $request = $this->sendRequest( $link );
+            
+            /* Exit on failure */
+            if( is_null( $request ) || !$request->getStatusCode() == "200" )
+            {
+                break;
+            }
+
+            /* Decode response */
+            $response = json_decode( $request->getBody()->getContents() );
+
+            /* Loop forms from API request */
+            foreach( $response->results as $form )
+            {
+                /* Add form to forms array */
+                /* Key = name, Value = ID */
+                $forms[ $form->name ] = $form->id;
+            }
+
+            /* Check if there are more pages */
+            if( !property_exists( $response, 'paging' ) || !isset( $response->paging->next->link ) )
+            {
+                break;
+            }
+            
+            /* Set API URL */
+            $link = $response->paging->next->link;
+            
         }
 
         /* Sort alphabetically */
