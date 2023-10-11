@@ -83,6 +83,7 @@ class MigrateController extends Controller
 
         /* Output success message */
         $this->line( "{$fieldsMigrated} field(s) migrated!", "success" );
+        $this->line( "It is highly recommended that you rebuild your project config!", "warning" );
         return $this->end();
 
     }
