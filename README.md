@@ -64,6 +64,8 @@ This will ensure your plugin is installed and configured correctly and then list
 
 By continuing, each of the old fields will be updated to the HubspotFormDropdown provided with this plugin. 
 
+Once the command has been run, you should rebuild your project config with `php ./craft project-config/rebuild` to ensure all fields are synced correctly. 
+
 Once this is complete, you should update your templates to use the new syntax. 
 
 **Old syntax:** 
