@@ -179,6 +179,7 @@ class MigrateController extends Controller
         $newField->instructions = $field->instructions;
         $newField->translationMethod = $field->translationMethod;
         $newField->translationKeyFormat = $field->translationKeyFormat;
+        $newField->columnSuffix = $field->columnSuffix;
 
         /* Set Context or Group */
         if ($field->context && strpos($field->context, 'matrixBlockType:') === 0) {
