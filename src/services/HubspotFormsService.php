@@ -20,7 +20,7 @@ class HubspotFormsService extends Component
         $forms = [];
 
         /* Set API URL */
-        $link = "https://api.hubapi.com/marketing/v3/forms?limit=100";
+        $link = "https://api.hubapi.com/marketing/v3/forms";
 
         while( true )
         {
