@@ -21,7 +21,7 @@ class HubspotFormDropdown extends Field
     /*
      * Define input
      */
-    public function getInputHtml($value, ElementInterface $element = null): string
+    public function getInputHtml(mixed $value, ?\craft\base\ElementInterface $element = null): string
     {
 
         /* Set existing value */
