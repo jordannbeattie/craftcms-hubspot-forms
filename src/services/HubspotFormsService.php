@@ -20,7 +20,8 @@ class HubspotFormsService extends Component
         $forms = [];
 
         /* Set API URL */
-        $link = "https://api.hubapi.com/marketing/v3/forms?limit=100";
+        $limit = Craft::$app->plugins->getPlugin('hubspot-forms')->getSettings()->getHsLimit() ?? 100;
+        $link = "https://api.hubapi.com/marketing/v3/forms?limit={$limit}";
 
         while( true )
         {
@@ -109,6 +110,8 @@ class HubspotFormsService extends Component
      */
     private function sendRequest( $url, $token = null )
     {
+        Craft::info("Sending request to " . $url);
+        
         try
         {
 

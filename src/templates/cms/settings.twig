@@ -9,3 +9,16 @@
     autofocus      : true,
     suggestEnvVars : true
 }) }}
+
+{{ forms.textField({
+    label          : 'HubSpot Limit',
+    name           : 'hsLimit',
+    value          : settings['hsLimit'],
+    instructions   : "Set the limit of forms returned per page when requesting all forms",
+    required       : false,
+    autofocus      : true,
+    placeholder    : 100,
+    type           : 'number',
+    min            : 1, 
+    max            : 100,
+}) }}

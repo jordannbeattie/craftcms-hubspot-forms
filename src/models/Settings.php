@@ -9,7 +9,7 @@ class Settings extends \craft\base\Model
     /*
      * Declare Variables
      */
-    public $hsToken, $hsPortalId;
+    public $hsToken, $hsPortalId, $hsLimit;
     
     /*
      * Define rules
@@ -37,6 +37,16 @@ class Settings extends \craft\base\Model
     public function getHsPortalId(): ?string
     {
         return Craft::parseEnv( $this->hsPortalId );
+    }
+    
+    /*
+     * Get hsPortalId
+     */
+    public function getHsLimit(): int
+    {
+        $int = intval($this->hsLimit);
+        if( $int > 0 ) return $int;
+        return 100;
     }
     
 }
